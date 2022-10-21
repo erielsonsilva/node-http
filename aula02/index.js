@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
-const hostname = "192.168.3.85";
+const hostname = "localhost";
 const port = 5000;
 
 const books = [
@@ -40,12 +40,17 @@ app.get("/html", (req, res) => {
 });
 
 app.get("/books", (req, res) => {
-  res.send(books.filter((i) => !i.favorito));
+  res.send(books);
 });
 
 app.post("/books", (req, res) => {
-  books.push(req.body);
-  res.send(req.body);
+   const body = req.body
+console.log('body'.body)
+
+body.map(obj => books.push(obj)   )
+
+
+  res.send(books);
 });
 
 app.get("/books/:id", (req, res) => {
@@ -53,5 +58,16 @@ app.get("/books/:id", (req, res) => {
   if (book) res.send(book);
   else res.sendStatus(404);
 });
+
+app.delete('/books/:id', (req, res) => {
+  let id = req.params.id
+let index = books.findIndex(obj => obj._id === id)
+
+books.splice(index, 1)
+
+res.send(books)
+
+})
+
 
 app.listen(port, hostname, () => console.log(`http://${hostname}:${port}`));
